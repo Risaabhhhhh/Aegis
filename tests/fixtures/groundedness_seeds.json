@@ -1,0 +1,142 @@
+[
+  {
+    "id": "1",
+    "context": "The company's revenue in Q3 2023 was $4.5 billion, representing a 15% year-over-year increase.",
+    "response": "The company saw a 15% revenue growth in the third quarter of 2023.",
+    "expected_status": "SUCCESS",
+    "description": "Direct entailment, pure rewording."
+  },
+  {
+    "id": "2",
+    "context": "The Eiffel Tower was built in 1889 by Gustave Eiffel for the 1889 World's Fair.",
+    "response": "The Eiffel Tower was built in 1889 by Gustave Eiffel.",
+    "expected_status": "SUCCESS",
+    "description": "Subset entailment (omits World's Fair)."
+  },
+  {
+    "id": "3",
+    "context": "Water boils at 100 degrees Celsius at sea level.",
+    "response": "Water boils at 200 degrees Celsius at sea level.",
+    "expected_status": "FAILED",
+    "description": "Direct contradiction."
+  },
+  {
+    "id": "4",
+    "context": "Apple announced the iPhone 15 on September 12, 2023.",
+    "response": "Apple announced the iPhone 15 on September 12, 2023. It features a new titanium body.",
+    "expected_status": "FAILED",
+    "description": "Hallucination (titanium body not in context)."
+  },
+  {
+    "id": "5",
+    "context": "The capital of France is Paris. The population is over 2 million.",
+    "response": "Paris is the capital of France.",
+    "expected_status": "SUCCESS",
+    "description": "Entailment from multi-sentence context."
+  },
+  {
+    "id": "6",
+    "context": "Mars is the fourth planet from the Sun.",
+    "response": "Jupiter is the largest planet in our solar system.",
+    "expected_status": "FAILED",
+    "description": "Unrelated hallucination/neutral."
+  },
+  {
+    "id": "7",
+    "context": "Our store hours are Monday to Friday, 9 AM to 5 PM.",
+    "response": "You can visit our store on weekends.",
+    "expected_status": "FAILED",
+    "description": "Contradiction by implication."
+  },
+  {
+    "id": "8",
+    "context": "John has two cats, Whiskers and Paws.",
+    "response": "John owns cats.",
+    "expected_status": "SUCCESS",
+    "description": "Hypernym entailment."
+  },
+  {
+    "id": "9",
+    "context": "The recipe calls for 2 cups of flour and 1 cup of sugar.",
+    "response": "You need 2 cups of sugar for the recipe.",
+    "expected_status": "FAILED",
+    "description": "Entity mismatch contradiction."
+  },
+  {
+    "id": "10",
+    "context": "In 2020, Tokyo hosted the Summer Olympics.",
+    "response": "Tokyo hosted the Olympics in 2020.",
+    "expected_status": "SUCCESS",
+    "description": "Entailment with slight abstraction."
+  },
+  {
+    "id": "11",
+    "context": "Alice went to the market to buy apples.",
+    "response": "Alice bought oranges at the market.",
+    "expected_status": "FAILED",
+    "description": "Contradiction on object."
+  },
+  {
+    "id": "12",
+    "context": "The movie 'Inception' was directed by Christopher Nolan and released in 2010.",
+    "response": "Christopher Nolan directed 'Inception'.",
+    "expected_status": "SUCCESS",
+    "description": "Entailment by dropping information."
+  },
+  {
+    "id": "13",
+    "context": "The software update improves battery life by 20%.",
+    "response": "The update makes the phone faster.",
+    "expected_status": "FAILED",
+    "description": "Hallucination of unrelated benefit."
+  },
+  {
+    "id": "14",
+    "context": "Project X is delayed due to supply chain issues. It will launch in Q4.",
+    "response": "Project X will launch in Q4 despite supply chain delays.",
+    "expected_status": "SUCCESS",
+    "description": "Complex entailment combining clauses."
+  },
+  {
+    "id": "15",
+    "context": "The new policy mandates remote work on Fridays.",
+    "response": "Employees must work remotely every day.",
+    "expected_status": "FAILED",
+    "description": "Contradiction (generalization)."
+  },
+  {
+    "id": "16",
+    "context": "Leonardo da Vinci painted the Mona Lisa in the early 16th century.",
+    "response": "The Mona Lisa was painted by Leonardo da Vinci.",
+    "expected_status": "SUCCESS",
+    "description": "Passive voice entailment."
+  },
+  {
+    "id": "17",
+    "context": "The stock price closed at $150.25 today.",
+    "response": "The stock market crashed today.",
+    "expected_status": "FAILED",
+    "description": "Hallucination of severe event."
+  },
+  {
+    "id": "18",
+    "context": "The package includes a laptop, charger, and a mouse.",
+    "response": "A mouse is included in the package.",
+    "expected_status": "SUCCESS",
+    "description": "Partial list entailment."
+  },
+  {
+    "id": "19",
+    "context": "The marathon was cancelled due to heavy rain.",
+    "response": "The marathon was cancelled because of sunny weather.",
+    "expected_status": "FAILED",
+    "description": "Direct contradiction of cause."
+  },
+  {
+    "id": "20",
+    "context": "Python 3.10 introduced structural pattern matching.",
+    "response": "Python 3.10 brought structural pattern matching.",
+    "expected_status": "SUCCESS",
+    "description": "Synonym entailment."
+  }
+]
