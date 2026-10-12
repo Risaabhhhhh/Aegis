@@ -96,3 +96,13 @@ Every engine's `metadata` dictionary must include:
 
 Engines that do **NOT** use an LLM must **never** touch the `adapters/` layer. Any engine that requires an external LLM call must implement the adapter first (inheriting from `BaseAdapter` in `adapters/base.py`), and requires an explicit PR note documenting the external dependency and model behavior.
 
+## Engine Timeouts
+
+Engine timeouts (default 30 seconds, configurable via `engine_timeout` in `aegis.evaluate()` or via an engine's `.timeout` attribute) are enforced in `aegis.py`'s engine execution loop.
+
+**Important Note on Soft Timeouts**:
+- Timeouts in Aegis are **soft**: the underlying execution thread is **not killed** (as Python does not support forcibly terminating arbitrary threads across platforms).
+- When an engine exceeds the allotted timeout, Aegis immediately marks the engine as `status="FAILED"` with `failure_reason="timeout"`, appends it to `failed_engines`, and proceeds to run remaining engines and compute AMEVA aggregation.
+- The worker thread continues in the background until it naturally completes or yields; its eventual output or exceptions are ignored and do not affect the pipeline result or mutate state.
+
+

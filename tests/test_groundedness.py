@@ -46,7 +46,8 @@ def test_groundedness_seeds(groundedness_engine, seed_data):
         for fs in failed_seeds:
             print(f"  - {fs}")
             
-    assert accuracy >= 0.8, f"Groundedness accuracy too low: {accuracy*100:.2f}%"
+    failing_ids = [fs.split(":")[0].replace("ID ", "").strip() for fs in failed_seeds]
+    assert not failed_seeds, f"Groundedness seed test failed on {len(failed_seeds)}/{total} seeds. Failing IDs: {failing_ids}. Details:\n" + "\n".join(failed_seeds)
 
 def test_empty_context(groundedness_engine):
     req = Request(text="test")

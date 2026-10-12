@@ -23,9 +23,21 @@ def test_split_claims_empty_or_whitespace(empty_input):
     assert claims == []
 
 
-def test_split_claims_fallback_when_nltk_missing(monkeypatch):
+def test_split_claims_raises_when_nltk_missing(monkeypatch):
     import engines.common as common
     monkeypatch.setattr(common, "nltk", None)
-    text = "Fallback when nltk is none."
-    claims = common.split_claims(text)
-    assert claims == ["Fallback when nltk is none."]
+    text = "Text needing tokenization."
+    with pytest.raises(RuntimeError, match="NLTK is not installed"):
+        common.split_claims(text)
+
+
+def test_split_claims_raises_when_punkt_data_missing(monkeypatch):
+    import engines.common as common
+    def mock_sent_tokenize(text):
+        raise LookupError("Resource punkt_tab not found.")
+
+    monkeypatch.setattr(common.nltk, "sent_tokenize", mock_sent_tokenize)
+    text = "Text needing tokenization when punkt is absent."
+    with pytest.raises(LookupError, match="NLTK tokenizer data is unavailable"):
+        common.split_claims(text)
+

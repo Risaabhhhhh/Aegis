@@ -544,3 +544,32 @@ contract.
 
 The system should expose enough structured information to support
 experiments and ablations
+
+## Setup & Installation
+
+Follow these steps to set up the Aegis environment from a clean clone:
+
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   # Windows:
+   .venv\Scripts\activate
+   # Linux/macOS:
+   source .venv/bin/activate
+   ```
+
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Download required NLTK tokenizer data:
+   ```bash
+   python -m nltk.downloader punkt punkt_tab
+   ```
+
+4. Run the test suite:
+   ```bash
+   pytest
+   ```
+
