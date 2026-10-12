@@ -19,24 +19,24 @@ def seed_data():
 
 def test_groundedness_seeds(groundedness_engine, seed_data):
     correct = 0
-    total = len(seed_data)
+    total = len(seed_data["examples"])
     failed_seeds = []
     
-    for item in seed_data:
+    for item in seed_data["examples"]:
         req = Request(text="test")
-        ctx = [ContextChunk(text=item["context"])]
+        ctx = [ContextChunk(text=c["text"], source_id=c.get("source_id")) for c in item["context"]]
         res = Response(text=item["response"])
         profile = RequestProfile()
         
         result = groundedness_engine.run(req, ctx, res, profile)
+        expected_score = 1.0 if item["expected_label"] == "entailment" else 0.0
         
-        if result.status == item["expected_status"]:
+        if result.status == "SUCCESS" and result.score == expected_score:
             correct += 1
         else:
             failed_seeds.append(
-                f"ID {item['id']}: expected {item['expected_status']}, got {result.status}. "
-                f"Score: {result.score:.2f}. "
-                f"Desc: {item['description']}"
+                f"ID {item['id']}: expected score {expected_score}, got {result.score} (status: {result.status}). "
+                f"Notes: {item['notes']}"
             )
             
     accuracy = correct / total
@@ -46,7 +46,6 @@ def test_groundedness_seeds(groundedness_engine, seed_data):
         for fs in failed_seeds:
             print(f"  - {fs}")
             
-    # We expect a high accuracy baseline, say >= 80% on this synthetic set.
     assert accuracy >= 0.8, f"Groundedness accuracy too low: {accuracy*100:.2f}%"
 
 def test_empty_context(groundedness_engine):
@@ -58,5 +57,28 @@ def test_empty_context(groundedness_engine):
     result = groundedness_engine.run(req, ctx, res, profile)
     
     assert result.status == "FAILED"
-    assert result.failure_reason == "empty_context"
+    assert result.failure_reason == "missing_context"
     assert result.score is None
+
+def test_empty_response(groundedness_engine):
+    req = Request(text="test")
+    ctx = [ContextChunk(text="some context")]
+    res = Response(text="   ")
+    profile = RequestProfile()
+    
+    result = groundedness_engine.run(req, ctx, res, profile)
+    
+    assert result.status == "FAILED"
+    assert result.failure_reason == "empty_response"
+    assert result.score is None
+
+def test_partial_grounding_score(groundedness_engine):
+    req = Request(text="test")
+    ctx = [ContextChunk(text="The Eiffel Tower is located in Paris, France.", source_id="doc-loc-1")]
+    res = Response(text="The Eiffel Tower is in Paris. It was built in 1999.")
+    profile = RequestProfile()
+    
+    result = groundedness_engine.run(req, ctx, res, profile)
+    
+    assert result.status == "SUCCESS"
+    assert result.score == 0.5

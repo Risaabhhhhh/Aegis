@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Eval Example",
+  "type": "object",
+  "properties": {
+    "id": { "type": "string" },
+    "context": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": { "type": "string" },
+          "source_id": { "type": "string" }
+        },
+        "required": ["text"]
+      }
+    },
+    "response": { "type": "string" },
+    "expected_label": { "type": "string" },
+    "notes": { "type": "string" }
+  },
+  "required": ["id", "response", "expected_label"]
+}

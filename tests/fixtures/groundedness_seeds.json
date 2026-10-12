@@ -1,142 +1,145 @@
-[
-  {
-    "id": "1",
-    "context": "The company's revenue in Q3 2023 was $4.5 billion, representing a 15% year-over-year increase.",
-    "response": "The company saw a 15% revenue growth in the third quarter of 2023.",
-    "expected_status": "SUCCESS",
-    "description": "Direct entailment, pure rewording."
-  },
-  {
-    "id": "2",
-    "context": "The Eiffel Tower was built in 1889 by Gustave Eiffel for the 1889 World's Fair.",
-    "response": "The Eiffel Tower was built in 1889 by Gustave Eiffel.",
-    "expected_status": "SUCCESS",
-    "description": "Subset entailment (omits World's Fair)."
-  },
-  {
-    "id": "3",
-    "context": "Water boils at 100 degrees Celsius at sea level.",
-    "response": "Water boils at 200 degrees Celsius at sea level.",
-    "expected_status": "FAILED",
-    "description": "Direct contradiction."
-  },
-  {
-    "id": "4",
-    "context": "Apple announced the iPhone 15 on September 12, 2023.",
-    "response": "Apple announced the iPhone 15 on September 12, 2023. It features a new titanium body.",
-    "expected_status": "FAILED",
-    "description": "Hallucination (titanium body not in context)."
-  },
-  {
-    "id": "5",
-    "context": "The capital of France is Paris. The population is over 2 million.",
-    "response": "Paris is the capital of France.",
-    "expected_status": "SUCCESS",
-    "description": "Entailment from multi-sentence context."
-  },
-  {
-    "id": "6",
-    "context": "Mars is the fourth planet from the Sun.",
-    "response": "Jupiter is the largest planet in our solar system.",
-    "expected_status": "FAILED",
-    "description": "Unrelated hallucination/neutral."
-  },
-  {
-    "id": "7",
-    "context": "Our store hours are Monday to Friday, 9 AM to 5 PM.",
-    "response": "You can visit our store on weekends.",
-    "expected_status": "FAILED",
-    "description": "Contradiction by implication."
-  },
-  {
-    "id": "8",
-    "context": "John has two cats, Whiskers and Paws.",
-    "response": "John owns cats.",
-    "expected_status": "SUCCESS",
-    "description": "Hypernym entailment."
-  },
-  {
-    "id": "9",
-    "context": "The recipe calls for 2 cups of flour and 1 cup of sugar.",
-    "response": "You need 2 cups of sugar for the recipe.",
-    "expected_status": "FAILED",
-    "description": "Entity mismatch contradiction."
-  },
-  {
-    "id": "10",
-    "context": "In 2020, Tokyo hosted the Summer Olympics.",
-    "response": "Tokyo hosted the Olympics in 2020.",
-    "expected_status": "SUCCESS",
-    "description": "Entailment with slight abstraction."
-  },
-  {
-    "id": "11",
-    "context": "Alice went to the market to buy apples.",
-    "response": "Alice bought oranges at the market.",
-    "expected_status": "FAILED",
-    "description": "Contradiction on object."
-  },
-  {
-    "id": "12",
-    "context": "The movie 'Inception' was directed by Christopher Nolan and released in 2010.",
-    "response": "Christopher Nolan directed 'Inception'.",
-    "expected_status": "SUCCESS",
-    "description": "Entailment by dropping information."
-  },
-  {
-    "id": "13",
-    "context": "The software update improves battery life by 20%.",
-    "response": "The update makes the phone faster.",
-    "expected_status": "FAILED",
-    "description": "Hallucination of unrelated benefit."
-  },
-  {
-    "id": "14",
-    "context": "Project X is delayed due to supply chain issues. It will launch in Q4.",
-    "response": "Project X will launch in Q4 despite supply chain delays.",
-    "expected_status": "SUCCESS",
-    "description": "Complex entailment combining clauses."
-  },
-  {
-    "id": "15",
-    "context": "The new policy mandates remote work on Fridays.",
-    "response": "Employees must work remotely every day.",
-    "expected_status": "FAILED",
-    "description": "Contradiction (generalization)."
-  },
-  {
-    "id": "16",
-    "context": "Leonardo da Vinci painted the Mona Lisa in the early 16th century.",
-    "response": "The Mona Lisa was painted by Leonardo da Vinci.",
-    "expected_status": "SUCCESS",
-    "description": "Passive voice entailment."
-  },
-  {
-    "id": "17",
-    "context": "The stock price closed at $150.25 today.",
-    "response": "The stock market crashed today.",
-    "expected_status": "FAILED",
-    "description": "Hallucination of severe event."
-  },
-  {
-    "id": "18",
-    "context": "The package includes a laptop, charger, and a mouse.",
-    "response": "A mouse is included in the package.",
-    "expected_status": "SUCCESS",
-    "description": "Partial list entailment."
-  },
-  {
-    "id": "19",
-    "context": "The marathon was cancelled due to heavy rain.",
-    "response": "The marathon was cancelled because of sunny weather.",
-    "expected_status": "FAILED",
-    "description": "Direct contradiction of cause."
-  },
-  {
-    "id": "20",
-    "context": "Python 3.10 introduced structural pattern matching.",
-    "response": "Python 3.10 brought structural pattern matching.",
-    "expected_status": "SUCCESS",
-    "description": "Synonym entailment."
-  }
-]
+{
+  "schema_notes": "expected_label is the NLI-style ground truth (entailment/contradiction/neutral). The engine should mark 'entailment' cases as supported (score >= threshold) and both 'contradiction' and 'neutral' as unsupported. Contradiction cases exist to confirm P(entailment) comes out clearly low, not just under threshold; neutral cases test the harder boundary where a plausible-sounding but unstated claim should still score low.",
+  "examples": [
+    {
+      "id": "gr-001",
+      "context": [{"text": "The Reserve Bank of India kept the repo rate unchanged at 6.5% in its August 2026 policy meeting.", "source_id": "doc-rbi-1"}],
+      "response": "The RBI held the repo rate steady at 6.5% in August 2026.",
+      "expected_label": "entailment",
+      "notes": "paraphrase, same fact"
+    },
+    {
+      "id": "gr-002",
+      "context": [{"text": "Paracetamol should not be taken in doses exceeding 4000mg per day for adults, as this raises the risk of liver damage.", "source_id": "doc-med-1"}],
+      "response": "Adults should not exceed a daily paracetamol dose of 4000mg due to liver damage risk.",
+      "expected_label": "entailment",
+      "notes": "reworded restatement"
+    },
+    {
+      "id": "gr-003",
+      "context": [{"text": "The company reported quarterly revenue of $2.3 billion, up 12% year-over-year.", "source_id": "doc-fin-1"}],
+      "response": "Revenue grew 12% year-over-year to $2.3 billion for the quarter.",
+      "expected_label": "entailment",
+      "notes": "reordered clauses, same facts"
+    },
+    {
+      "id": "gr-004",
+      "context": [{"text": "Insulin resistance is a key characteristic of type 2 diabetes, where cells respond poorly to insulin.", "source_id": "doc-med-2"}],
+      "response": "In type 2 diabetes, cells don't respond well to insulin, a condition known as insulin resistance.",
+      "expected_label": "entailment",
+      "notes": "paraphrase"
+    },
+    {
+      "id": "gr-005",
+      "context": [{"text": "Mumbai's local train network carries approximately 7.5 million passengers daily across its three main lines.", "source_id": "doc-infra-1"}],
+      "response": "About 7.5 million people use Mumbai's local trains every day.",
+      "expected_label": "entailment",
+      "notes": "simplification, same numeric fact"
+    },
+    {
+      "id": "gr-006",
+      "context": [{"text": "The fund's expense ratio is 0.45%, significantly lower than the category average of 1.2%.", "source_id": "doc-fin-2"}],
+      "response": "This fund's 0.45% expense ratio is well below the 1.2% category average.",
+      "expected_label": "entailment",
+      "notes": "same fact, near-identical phrasing"
+    },
+    {
+      "id": "gr-007",
+      "context": [{"text": "Clinical trials showed the vaccine was 89% effective at preventing symptomatic infection after two doses.", "source_id": "doc-med-3"}],
+      "response": "After two doses, the vaccine prevented symptomatic infection 89% of the time in trials.",
+      "expected_label": "entailment",
+      "notes": "paraphrase"
+    },
+    {
+      "id": "gr-008",
+      "context": [{"text": "The Reserve Bank of India kept the repo rate unchanged at 6.5% in its August 2026 policy meeting.", "source_id": "doc-rbi-1"}],
+      "response": "The RBI raised the repo rate to 7% in August 2026.",
+      "expected_label": "contradiction",
+      "notes": "direct numeric + action contradiction"
+    },
+    {
+      "id": "gr-009",
+      "context": [{"text": "Paracetamol should not be taken in doses exceeding 4000mg per day for adults, as this raises the risk of liver damage.", "source_id": "doc-med-1"}],
+      "response": "It's safe for adults to take up to 6000mg of paracetamol daily.",
+      "expected_label": "contradiction",
+      "notes": "contradicts stated safety limit"
+    },
+    {
+      "id": "gr-010",
+      "context": [{"text": "The company reported quarterly revenue of $2.3 billion, up 12% year-over-year.", "source_id": "doc-fin-1"}],
+      "response": "The company's quarterly revenue fell 12% compared to last year.",
+      "expected_label": "contradiction",
+      "notes": "opposite direction of change"
+    },
+    {
+      "id": "gr-011",
+      "context": [{"text": "Insulin resistance is a key characteristic of type 2 diabetes, where cells respond poorly to insulin.", "source_id": "doc-med-2"}],
+      "response": "Type 2 diabetes patients' cells respond normally to insulin.",
+      "expected_label": "contradiction",
+      "notes": "direct negation"
+    },
+    {
+      "id": "gr-012",
+      "context": [{"text": "Mumbai's local train network carries approximately 7.5 million passengers daily across its three main lines.", "source_id": "doc-infra-1"}],
+      "response": "Mumbai's local trains serve fewer than 1 million passengers per day.",
+      "expected_label": "contradiction",
+      "notes": "numeric contradiction"
+    },
+    {
+      "id": "gr-013",
+      "context": [{"text": "Clinical trials showed the vaccine was 89% effective at preventing symptomatic infection after two doses.", "source_id": "doc-med-3"}],
+      "response": "The vaccine showed no measurable effectiveness against symptomatic infection in trials.",
+      "expected_label": "contradiction",
+      "notes": "contradicts effectiveness finding"
+    },
+    {
+      "id": "gr-014",
+      "context": [{"text": "The fund's expense ratio is 0.45%, significantly lower than the category average of 1.2%.", "source_id": "doc-fin-2"}],
+      "response": "This fund charges a higher expense ratio than most funds in its category.",
+      "expected_label": "contradiction",
+      "notes": "contradicts the relative comparison"
+    },
+    {
+      "id": "gr-015",
+      "context": [{"text": "The Reserve Bank of India kept the repo rate unchanged at 6.5% in its August 2026 policy meeting.", "source_id": "doc-rbi-1"}],
+      "response": "Analysts expect the RBI to cut rates twice before the end of the fiscal year.",
+      "expected_label": "neutral",
+      "notes": "plausible-sounding forecast, not stated in context"
+    },
+    {
+      "id": "gr-016",
+      "context": [{"text": "Paracetamol should not be taken in doses exceeding 4000mg per day for adults, as this raises the risk of liver damage.", "source_id": "doc-med-1"}],
+      "response": "Paracetamol was first marketed under the brand name Tylenol in the United States.",
+      "expected_label": "neutral",
+      "notes": "true-sounding trivia, unrelated to and unverifiable from the given context"
+    },
+    {
+      "id": "gr-017",
+      "context": [{"text": "The company reported quarterly revenue of $2.3 billion, up 12% year-over-year.", "source_id": "doc-fin-1"}],
+      "response": "The company's CEO said this growth was driven by strong demand in Southeast Asia.",
+      "expected_label": "neutral",
+      "notes": "plausible elaboration not present in context"
+    },
+    {
+      "id": "gr-018",
+      "context": [{"text": "Mumbai's local train network carries approximately 7.5 million passengers daily across its three main lines.", "source_id": "doc-infra-1"}],
+      "response": "The network is currently being expanded with two new underground lines.",
+      "expected_label": "neutral",
+      "notes": "unsupported additional claim"
+    },
+    {
+      "id": "gr-019",
+      "context": [{"text": "Clinical trials showed the vaccine was 89% effective at preventing symptomatic infection after two doses.", "source_id": "doc-med-3"}],
+      "response": "The vaccine requires storage at -70°C, making distribution difficult in rural areas.",
+      "expected_label": "neutral",
+      "notes": "plausible related fact, absent from context"
+    },
+    {
+      "id": "gr-020",
+      "context": [{"text": "Insulin resistance is a key characteristic of type 2 diabetes, where cells respond poorly to insulin.", "source_id": "doc-med-2"}],
+      "response": "A 2024 study found that regular exercise can reduce insulin resistance by up to 30%.",
+      "expected_label": "neutral",
+      "notes": "fabricated citation-style claim, unsupported by context"
+    }
+  ]
+}

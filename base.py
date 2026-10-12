@@ -34,7 +34,7 @@ class EngineResult:
     evidence: list[dict]
     metadata: dict
     logs: list[str]
-    failure_reason: str | None = None
+    failure_reason: Literal["invalid_input", "timeout", "internal_error", "missing_context", "empty_response", "invalid_score_range"] | None = None
 
 @dataclass
 class ActionPlan:

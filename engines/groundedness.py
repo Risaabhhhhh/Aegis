@@ -1,16 +1,12 @@
 import scipy.special
 from base import Request, Context, Response, RequestProfile, EngineResult
 from engines.base import BaseEngine
+from engines.common import split_claims
 
 try:
     from sentence_transformers import CrossEncoder
 except ImportError:
     CrossEncoder = None
-    
-try:
-    import nltk
-except ImportError:
-    nltk = None
 
 class GroundednessEngine(BaseEngine):
     name = "groundedness"
@@ -18,8 +14,6 @@ class GroundednessEngine(BaseEngine):
     def __init__(self, model_name: str = "cross-encoder/nli-deberta-v3-base", threshold: float = 0.5):
         if CrossEncoder is None:
             raise ImportError("sentence-transformers is required for GroundednessEngine")
-        if nltk is None:
-            raise ImportError("nltk is required for GroundednessEngine")
             
         self.model_name = model_name
         self.threshold = threshold
@@ -44,20 +38,17 @@ class GroundednessEngine(BaseEngine):
                 
         return self._model
         
-    def evaluate(self, request: Request, context: Context, response: Response, profile: RequestProfile) -> EngineResult:
+    def validate(self, request: Request, context: Context, response: Response, profile: RequestProfile) -> str | None:
         if not context:
-            return EngineResult(
-                status="FAILED",
-                score=None,
-                findings=["No context provided for groundedness evaluation."],
-                evidence=[],
-                metadata={},
-                logs=["Skipping groundedness due to empty context."],
-                failure_reason="empty_context"
-            )
+            return "missing_context"
+        if not response.text or not response.text.strip():
+            return "empty_response"
+        return None
+        
+    def evaluate(self, request: Request, context: Context, response: Response, profile: RequestProfile) -> EngineResult:
             
-        # Proper sentence tokenization
-        sentences = nltk.sent_tokenize(response.text)
+        # Proper sentence tokenization via shared helper
+        sentences = split_claims(response.text)
         if not sentences:
             sentences = [response.text]
             
@@ -97,16 +88,15 @@ class GroundednessEngine(BaseEngine):
             })
             
         total_claims = len(sentences)
-        score_percentage = (supported_claims / total_claims) * 100.0 if total_claims > 0 else 0.0
-        
-        status = "FAILED" if supported_claims < total_claims else "SUCCESS"
+        score = (supported_claims / total_claims) if total_claims > 0 else 0.0
         
         return EngineResult(
-            status=status,
-            score=score_percentage,
+            status="SUCCESS",
+            score=score,
             findings=findings,
             evidence=evidence,
             metadata={
+                "engine_version": "0.1.0",
                 "model": self.model_name,
                 "threshold": self.threshold
             },
