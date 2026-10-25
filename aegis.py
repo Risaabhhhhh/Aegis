@@ -2,7 +2,7 @@ import copy
 import concurrent.futures
 import json
 import uuid
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from base import Request, ContextChunk, Context, Response, RequestProfile, EngineResult, ActionPlan
 from routing import request_understanding, execution_policy
 from ameva import aggregator, coverage
@@ -19,6 +19,7 @@ class AegisResult:
     engine_results: dict[str, EngineResult]
     status: str
     request_id: str = ""
+    skipped_engines: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -26,6 +27,7 @@ class AegisResult:
             "aggregate_score": self.aggregate_score,
             "coverage": self.coverage,
             "failed_engines": list(self.failed_engines),
+            "skipped_engines": dict(self.skipped_engines),
             "status": self.status,
             "engine_results": {
                 name: {
@@ -74,10 +76,12 @@ def evaluate(
     # 1. Request Understanding (Routing)
     profile = request_understanding.build_request_profile(request, context, response)
     target_engines = engines if engines is not None else REGISTERED_ENGINES
+    candidate_names = [e.name for e in target_engines]
+    skipped_engines = execution_policy.determine_skipped_engines(profile, candidate_names)
     plan = execution_policy.build_action_plan(
         profile,
         request_id,
-        selected_engines=[e.name for e in target_engines],
+        selected_engines=candidate_names,
     )
     
     # 2. Run Engines
@@ -131,6 +135,7 @@ def evaluate(
         aggregate_score=aggregate_score,
         coverage=coverage_score,
         failed_engines=failed_engines,
+        skipped_engines=skipped_engines,
         engine_results=results,
         status=status,
     )

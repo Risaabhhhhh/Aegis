@@ -1,0 +1,46 @@
+[
+  {
+    "p": 0.1,
+    "trials": 10000,
+    "true_aggregate": 0.805,
+    "ameva_renormalization_mae": 0.012637717948717946,
+    "imputed_zero_mae": 0.081147,
+    "ameva_x_coverage_mae": 0.081147,
+    "ameva_renormalization": 0.012637717948717946,
+    "imputed_zero": 0.081147,
+    "ameva_x_coverage": 0.081147
+  },
+  {
+    "p": 0.2,
+    "trials": 10000,
+    "true_aggregate": 0.805,
+    "ameva_renormalization_mae": 0.027884858974358967,
+    "imputed_zero_mae": 0.16078950000000003,
+    "ameva_x_coverage_mae": 0.1607895,
+    "ameva_renormalization": 0.027884858974358967,
+    "imputed_zero": 0.16078950000000003,
+    "ameva_x_coverage": 0.1607895
+  },
+  {
+    "p": 0.3,
+    "trials": 10000,
+    "true_aggregate": 0.805,
+    "ameva_renormalization_mae": 0.05392165384615384,
+    "imputed_zero_mae": 0.24195700000000006,
+    "ameva_x_coverage_mae": 0.24195700000000006,
+    "ameva_renormalization": 0.05392165384615384,
+    "imputed_zero": 0.24195700000000006,
+    "ameva_x_coverage": 0.24195700000000006
+  },
+  {
+    "p": 0.5,
+    "trials": 10000,
+    "true_aggregate": 0.805,
+    "ameva_renormalization_mae": 0.14122423076923077,
+    "imputed_zero_mae": 0.40230950000000004,
+    "ameva_x_coverage_mae": 0.40230950000000004,
+    "ameva_renormalization": 0.14122423076923077,
+    "imputed_zero": 0.40230950000000004,
+    "ameva_x_coverage": 0.40230950000000004
+  }
+]

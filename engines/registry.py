@@ -1,7 +1,7 @@
 from engines.base import BaseEngine
 from engines.groundedness import GroundednessEngine
-# from engines.hallucination import HallucinationEngine
-# from engines.prompt_injection import PromptInjectionEngine
+from engines.hallucination import HallucinationEngine
+from engines.prompt_injection import PromptInjectionEngine
 from ameva import weight_tables
 
 
@@ -34,8 +34,8 @@ def validate_registry(engines: list[BaseEngine] | None = None) -> None:
 # =====================================================================
 REGISTERED_ENGINES: list[BaseEngine] = [
     GroundednessEngine(),
-    # HallucinationEngine(),
-    # PromptInjectionEngine(),
+    HallucinationEngine(),
+    PromptInjectionEngine(),
 ]
 
 # Fail loudly at startup if registry is invalid

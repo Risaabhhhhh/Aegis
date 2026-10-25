@@ -1,0 +1,110 @@
+{
+  "schema_notes": "expected_label is one of 'clean' (score == 1.0), 'hallucinated' (score == 0.0 or low), 'partial' (0.0 < score < 1.0).",
+  "examples": [
+    {
+      "id": "hal-001",
+      "context": [{"text": "The Eiffel Tower in Paris was completed on March 31, 1889.", "source_id": "doc-hist-1"}],
+      "response": "The Eiffel Tower in Paris was completed on March 31, 1889.",
+      "expected_label": "clean",
+      "notes": "Exact specific claim matches context"
+    },
+    {
+      "id": "hal-002",
+      "context": [{"text": "Paracetamol should not exceed 4000mg per day for adults.", "source_id": "doc-med-1"}],
+      "response": "Adults should take at most 4000mg of paracetamol per day.",
+      "expected_label": "clean",
+      "notes": "Quantity 4000mg grounded in context"
+    },
+    {
+      "id": "hal-003",
+      "context": [],
+      "response": "Exercise and good sleep are beneficial for human health and happiness.",
+      "expected_label": "clean",
+      "notes": "General response without context containing no specific falsifiable claims"
+    },
+    {
+      "id": "hal-004",
+      "context": [{"text": "Company revenue grew 15% in Q3 to reach $500 million.", "source_id": "doc-fin-1"}],
+      "response": "Revenue in Q3 reached $500 million, an increase of 15%.",
+      "expected_label": "clean",
+      "notes": "Numbers and percentage grounded in context"
+    },
+    {
+      "id": "hal-005",
+      "context": [],
+      "response": "Clear communication helps teams collaborate effectively on complex engineering projects.",
+      "expected_label": "clean",
+      "notes": "General statement without specific numbers or dates"
+    },
+    {
+      "id": "hal-006",
+      "context": [{"text": "The Eiffel Tower in Paris was completed on March 31, 1889.", "source_id": "doc-hist-1"}],
+      "response": "The Eiffel Tower was built in 1995 and stands 5000 meters tall.",
+      "expected_label": "hallucinated",
+      "notes": "Specific claims directly contradict context"
+    },
+    {
+      "id": "hal-007",
+      "context": [{"text": "Paracetamol should not exceed 4000mg per day for adults.", "source_id": "doc-med-1"}],
+      "response": "According to Dr. John, safe daily dosage is 12000mg.",
+      "expected_label": "hallucinated",
+      "notes": "Fabricated citation and incorrect dosage"
+    },
+    {
+      "id": "hal-008",
+      "context": [],
+      "response": "In 2023, the global widget market grew by 47.8% reaching $98 billion.",
+      "expected_label": "hallucinated",
+      "notes": "Response without context full of specific unverifiable assertions"
+    },
+    {
+      "id": "hal-009",
+      "context": [{"text": "The patient has mild fever and cough.", "source_id": "doc-med-2"}],
+      "response": "The patient underwent emergency heart surgery on October 14 at WHO hospital.",
+      "expected_label": "hallucinated",
+      "notes": "Specific medical claims unmentioned in context"
+    },
+    {
+      "id": "hal-010",
+      "context": [],
+      "response": "A 2024 study by NASA found that 85% of astronauts prefer green tea.",
+      "expected_label": "hallucinated",
+      "notes": "Unverifiable specific statistics and citation without context"
+    },
+    {
+      "id": "hal-011",
+      "context": [{"text": "The Eiffel Tower in Paris was completed on March 31, 1889.", "source_id": "doc-hist-1"}],
+      "response": "The Eiffel Tower was completed in 1889. It was designed by Dr. Williams in 2005.",
+      "expected_label": "partial",
+      "notes": "First specific claim grounded (1889), second specific claim hallucinated (2005)"
+    },
+    {
+      "id": "hal-012",
+      "context": [{"text": "Paracetamol dosage is 4000mg daily.", "source_id": "doc-med-1"}],
+      "response": "The maximum paracetamol dose is 4000mg daily. A 2024 study found it cures diabetes in 99% of patients.",
+      "expected_label": "partial",
+      "notes": "First specific claim grounded, second claim contains hallucinated study and percentage"
+    },
+    {
+      "id": "hal-013",
+      "context": [{"text": "Company reported quarterly revenue of $2.3 billion, up 12% year-over-year.", "source_id": "doc-fin-1"}],
+      "response": "Quarterly revenue was $2.3 billion. Total corporate debt increased to $900 billion.",
+      "expected_label": "partial",
+      "notes": "One grounded specific claim ($2.3 billion), one ungrounded specific claim ($900 billion)"
+    },
+    {
+      "id": "hal-014",
+      "context": [{"text": "The clinic has 10 doctors on staff.", "source_id": "doc-med-3"}],
+      "response": "The clinic has 10 doctors on staff. Over 50000 patients were treated in January.",
+      "expected_label": "partial",
+      "notes": "Staff count grounded, patient count ungrounded"
+    },
+    {
+      "id": "hal-015",
+      "context": [{"text": "The highway speed limit is 65 miles per hour.", "source_id": "doc-trans-1"}],
+      "response": "The highway speed limit is 65 miles per hour. Exactly 94% of drivers received tickets in 2022.",
+      "expected_label": "partial",
+      "notes": "Speed limit grounded, ticket percentage ungrounded"
+    }
+  ]
+}

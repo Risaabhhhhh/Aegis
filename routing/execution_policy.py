@@ -2,6 +2,19 @@ from base import RequestProfile, ActionPlan
 from engines.registry import REGISTERED_ENGINES
 from ameva import weight_tables
 
+
+def determine_skipped_engines(
+    profile: RequestProfile,
+    candidate_engines: list[str] | None = None,
+) -> dict[str, str]:
+    if candidate_engines is None:
+        candidate_engines = [e.name for e in REGISTERED_ENGINES]
+    skipped: dict[str, str] = {}
+    if not profile.context_available and "groundedness" in candidate_engines:
+        skipped["groundedness"] = "missing_context"
+    return skipped
+
+
 def build_action_plan(
     profile: RequestProfile,
     request_id: str,
@@ -9,6 +22,11 @@ def build_action_plan(
 ) -> ActionPlan:
     if selected_engines is None:
         selected_engines = [e.name for e in REGISTERED_ENGINES]
+    else:
+        selected_engines = list(selected_engines)
+
+    skipped = determine_skipped_engines(profile, selected_engines)
+    selected_engines = [name for name in selected_engines if name not in skipped]
 
     weights: dict[str, float] = {}
     for name in selected_engines:
@@ -23,3 +41,4 @@ def build_action_plan(
         selected_engines=selected_engines,
         weights=weights,
     )
+
